@@ -41,6 +41,8 @@ const login = async (req, res) => {
 	user.password = undefined
 	res.status(StatusCodes.OK).json({ user, token, location: user.location })
 }
-const updateUser = async (req, res) => {}
+const updateUser = async (req, res) => {
+	res.send('update user')
+}
 
 export { register, login, updateUser }
