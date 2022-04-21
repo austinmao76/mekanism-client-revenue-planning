@@ -20,6 +20,10 @@ app.get('/', (req, res) => {
 	res.send('welcome')
 })
 
+app.get('/api/v1', (req, res) => {
+	res.send('API')
+})
+
 app.use(express.json())
 
 app.use('/api/v1/auth', authRouter)
