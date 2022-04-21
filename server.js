@@ -3,6 +3,7 @@ const app = express()
 import dotenv from 'dotenv'
 dotenv.config()
 import 'express-async-errors'
+import morgan from 'morgan'
 
 //db and authenticate
 import connectDB from './db/connect.js'
@@ -23,6 +24,10 @@ app.get('/', (req, res) => {
 app.get('/api/v1', (req, res) => {
 	res.send('API')
 })
+
+if (process.env.NODE_ENV !== 'production') {
+	app.use(morgan('dev'))
+}
 
 app.use(express.json())
 
