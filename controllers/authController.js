@@ -13,7 +13,7 @@ const register = async (req, res, next) => {
 	}
 	const user = await User.create({ name, email, password })
 	const token = user.createJWT()
-	res.status(StatusCodes.OK).json({
+	res.status(StatusCodes.CREATED).json({
 		user: {
 			email: user.email,
 			lastName: user.lastName,
@@ -34,16 +34,13 @@ const login = async (req, res) => {
 		throw new UnauthenticatedError('Invalid Credentials')
 	}
 	const isPasswordCorrect = await user.comparePassword(password)
-	if (!user) {
+	if (!isPasswordCorrect) {
 		throw new UnauthenticatedError('Invalid Credentials')
 	}
 	const token = user.createJWT()
 	user.password = undefined
-	res.status(StatusCodes.CREATED).json({ user, token, location: user.location })
-	res.send('login user')
+	res.status(StatusCodes.OK).json({ user, token, location: user.location })
 }
-const updateUser = async (req, res) => {
-	res.send('update user')
-}
+const updateUser = async (req, res) => {}
 
 export { register, login, updateUser }
