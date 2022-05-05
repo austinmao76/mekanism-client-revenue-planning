@@ -1,26 +1,27 @@
 import { IoBarChartSharp } from 'react-icons/io5'
-import { MdQueryStats } from 'react-icons/md'
+import { MdQueryStats, MdOutlineAnalytics } from 'react-icons/md'
 import { FaWpforms } from 'react-icons/fa'
 import { ImProfile } from 'react-icons/im'
+import { RiExchangeDollarLine } from 'react-icons/ri'
 
 const links = [
 	{
 		id: 1,
-		text: 'stats',
+		text: 'analysis',
 		path: '/',
-		icon: <IoBarChartSharp />,
+		icon: <MdOutlineAnalytics />,
 	},
 	{
 		id: 2,
-		text: 'all jobs',
+		text: 'all revenue',
 		path: 'all-jobs',
 		icon: <MdQueryStats />,
 	},
 	{
 		id: 3,
-		text: 'add job',
+		text: 'edit revenue',
 		path: 'add-job',
-		icon: <FaWpforms />,
+		icon: <RiExchangeDollarLine />,
 	},
 	{
 		id: 4,
