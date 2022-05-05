@@ -1,6 +1,4 @@
-import { IoBarChartSharp } from 'react-icons/io5'
 import { MdQueryStats, MdOutlineAnalytics } from 'react-icons/md'
-import { FaWpforms } from 'react-icons/fa'
 import { ImProfile } from 'react-icons/im'
 import { RiExchangeDollarLine } from 'react-icons/ri'
 
