@@ -1,6 +1,7 @@
 import React, { useReducer, useContext } from 'react'
 import reducer from './reducer'
 import axios from 'axios'
+import { format, endOfDay } from 'date-fns'
 import {
 	DISPLAY_ALERT,
 	CLEAR_ALERT,
@@ -12,11 +13,17 @@ import {
 	UPDATE_USER_BEGIN,
 	UPDATE_USER_SUCCESS,
 	UPDATE_USER_ERROR,
+	HANDLE_CHANGE,
+	CLEAR_VALUES,
+	CREATE_JOB_BEGIN,
+	CREATE_JOB_SUCCESS,
+	CREATE_JOB_ERROR,
 } from './actions'
 
 const token = localStorage.getItem('token')
 const user = localStorage.getItem('user')
-const userLocation = localStorage.getItem('location')
+const date_formatted = format(endOfDay(new Date()), 'yyyy-MM-dd')
+// const userLocation = localStorage.getItem('location')
 
 const initialState = {
 	isLoading: false,
@@ -25,9 +32,27 @@ const initialState = {
 	alertType: '',
 	user: user ? JSON.parse(user) : null,
 	token: token,
-	userLocation: userLocation || '',
-	jobLocation: userLocation || '',
+	userLocation: '0' || '',
+	jobLocation: '0' || '',
 	showSidebar: false,
+	isEditing: false,
+	editJobId: '',
+	position: '',
+	company: '',
+	client: '',
+	// jobLocation
+	jobTypeOptions: [
+		'Social Media Comms',
+		'Experiential',
+		'Brand',
+		'Other',
+		"McDonald's",
+		'PM Pediatrics',
+	],
+	jobType: 'Social Media Comms',
+	statusOptions: ['pending', 'awaiting signature', 'approved'],
+	status: 'pending',
+	date: date_formatted,
 }
 
 const AppContext = React.createContext()
@@ -138,6 +163,47 @@ const AppProvider = ({ children }) => {
 		clearAlert()
 	}
 
+	const handleChange = ({ name, value }) => {
+		dispatch({
+			type: HANDLE_CHANGE,
+			payload: { name, value },
+		})
+	}
+
+	const clearValues = () => {
+		dispatch({ type: CLEAR_VALUES })
+	}
+
+	const createJob = async () => {
+		dispatch({ type: CREATE_JOB_BEGIN })
+		try {
+			const { position, company, client, jobLocation, jobType, status, date } =
+				state
+
+			await authFetch.post('/jobs', {
+				company,
+				position,
+				client,
+				jobLocation,
+				jobType,
+				status,
+				date,
+			})
+			dispatch({
+				type: CREATE_JOB_SUCCESS,
+			})
+			// call function instead clearValues()
+			dispatch({ type: CLEAR_VALUES })
+		} catch (error) {
+			if (error.response.status === 401) return
+			dispatch({
+				type: CREATE_JOB_ERROR,
+				payload: { msg: error.response.data.msg },
+			})
+		}
+		clearAlert()
+	}
+
 	return (
 		<AppContext.Provider
 			value={{
@@ -148,6 +214,9 @@ const AppProvider = ({ children }) => {
 				toggleSidebar,
 				logoutUser,
 				updateUser,
+				handleChange,
+				clearValues,
+				createJob,
 			}}>
 			{children}
 		</AppContext.Provider>

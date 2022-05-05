@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import { format, endOfDay } from 'date-fns'
+const date_formatted = format(endOfDay(new Date()), 'yyyy-MM-dd')
 
 const JobSchema = new mongoose.Schema(
 	{
@@ -12,22 +14,40 @@ const JobSchema = new mongoose.Schema(
 			required: [true, 'Please provide position'],
 			maxlength: 100,
 		},
+		client: {
+			type: String,
+			required: [true, 'Please provide client'],
+			maxlength: 100,
+		},
 		status: {
 			type: String,
-			enum: ['interview', 'declined', 'pending'],
+			enum: ['pending', 'awaiting signature', 'approved'],
 			default: 'pending',
 		},
 
 		jobType: {
 			type: String,
-			enum: ['full-time', 'part-time', 'remote', 'internship'],
-			default: 'full-time',
+			enum: [
+				'Social Media Comms',
+				'Experiential',
+				'Brand',
+				'Other',
+				"McDonald's",
+				'PM Pediatrics',
+			],
+			default: 'Social Media Comms',
 		},
 		jobLocation: {
 			type: String,
 			default: 'my city',
 			required: true,
 		},
+		date: {
+			type: Date,
+			default: date_formatted,
+			required: true,
+		},
+
 		createdBy: {
 			type: mongoose.Types.ObjectId,
 			ref: 'User',
