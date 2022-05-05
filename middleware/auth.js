@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { UnauthenticatedError } from '../errors/index.js'
 
 const auth = async (req, res, next) => {
+	// check header
 	const authHeader = req.headers.authorization
 	if (!authHeader || !authHeader.startsWith('Bearer')) {
 		throw new UnauthenticatedError('Authentication Invalid')
