@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { format, endOfDay } from 'date-fns'
-const date_formatted = format(endOfDay(new Date()), 'yyyy-MM-dd')
+import moment from 'moment'
 
 const JobSchema = new mongoose.Schema(
 	{
@@ -44,7 +44,7 @@ const JobSchema = new mongoose.Schema(
 		},
 		date: {
 			type: Date,
-			default: date_formatted,
+			default: moment().format('YYYY-MM-DD'),
 			required: true,
 		},
 
