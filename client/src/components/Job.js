@@ -34,7 +34,7 @@ const Job = ({
 					<JobInfo icon={<FaLocationArrow />} text={jobLocation} />
 					<JobInfo icon={<FaCalendarAlt />} text={date_formatted} />
 					<JobInfo icon={<FaBriefcase />} text={jobType} />
-					<div className={`status ${status}`}>{status}</div>
+					<div className={`status ${status.replace(' ', '-')}`}>{status}</div>
 				</div>
 				{/* content center later */}
 				<footer>
