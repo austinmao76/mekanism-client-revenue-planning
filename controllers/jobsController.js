@@ -17,12 +17,77 @@ const createJob = async (req, res) => {
 	res.status(StatusCodes.CREATED).json({ job })
 }
 const getAllJobs = async (req, res) => {
-	const jobs = await Job.find()
+	const { search, client, company, status, jobType, sort, startDate, endDate } =
+		req.query
 
-	res
-		.status(StatusCodes.OK)
-		.json({ jobs, totalJobs: jobs.length, numOfPages: 1 })
+	const queryObject = {}
+
+	const sdDate = startDate
+	const sdmonth = moment(sdDate).month()
+	const sdyear = moment(sdDate).year()
+	const startDateFormatted = new Date(sdyear, sdmonth, 1)
+
+	const edDate = endDate
+	const edMonth = moment(edDate).month()
+	const edYear = moment(edDate).year()
+	const endDateFormatted = new Date(edYear, edMonth + 1, 1)
+
+	const dateFilter = {
+		date: {
+			$gte: startDateFormatted,
+			$lte: endDateFormatted,
+		},
+	}
+
+	if (status && status !== 'all') {
+		queryObject.status = status
+	}
+	if (jobType && jobType !== 'all') {
+		queryObject.jobType = jobType
+	}
+
+	if (search) {
+		queryObject.position = { $regex: search, $options: 'i' }
+	}
+	if (client) {
+		queryObject.client = { $regex: client, $options: 'i' }
+	}
+	if (company) {
+		queryObject.company = { $regex: company, $options: 'i' }
+	}
+
+	// // NO AWAIT
+	let result = Job.find(queryObject).where(dateFilter)
+
+	// chain sort conditions
+	if (sort === 'latest') {
+		result = result.sort('-date')
+	}
+	if (sort === 'oldest') {
+		result = result.sort('date')
+	}
+	if (sort === 'a-z') {
+		result = result.sort('position')
+	}
+	if (sort === 'z-a') {
+		result = result.sort('-position')
+	}
+
+	// setup pagination
+	const page = Number(req.query.page) || 1
+	const limit = Number(req.query.limit) || 10
+	const skip = (page - 1) * limit
+
+	result = result.skip(skip).limit(limit)
+
+	const jobs = await result
+
+	const totalJobs = await Job.countDocuments(queryObject)
+	const numOfPages = Math.ceil(totalJobs / limit)
+
+	res.status(StatusCodes.OK).json({ jobs, totalJobs, numOfPages })
 }
+
 const updateJob = async (req, res) => {
 	const { id: jobId } = req.params
 

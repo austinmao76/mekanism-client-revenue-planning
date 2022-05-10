@@ -23,6 +23,7 @@ import {
 	EDIT_JOB_ERROR,
 	SHOW_STATS_BEGIN,
 	SHOW_STATS_SUCCESS,
+	CLEAR_FILTERS,
 } from './actions'
 
 import { initialState } from './appContext'
@@ -125,7 +126,7 @@ const reducer = (state, action) => {
 			jobLocation: '0',
 			jobType: 'Social Media Comms',
 			status: 'pending',
-			date: moment(),
+			date: moment().format('YYYY-MM-DD'),
 		}
 		return { ...state, ...initialState }
 	}
@@ -223,6 +224,19 @@ const reducer = (state, action) => {
 			isLoading: false,
 			stats: action.payload.stats,
 			monthlyApplications: action.payload.monthlyApplications,
+		}
+	}
+	if (action.type === CLEAR_FILTERS) {
+		return {
+			...state,
+			search: '',
+			company: '',
+			client: '',
+			searchStatus: 'all',
+			searchType: 'all',
+			sort: 'latest',
+			startDate: moment().startOf('year').format('YYYY-MM-DD'),
+			endDate: moment().format('YYYY-MM-DD'),
 		}
 	}
 	throw new Error(`no such action : ${action.type}`)

@@ -1,4 +1,10 @@
-import { FaLocationArrow, FaBriefcase, FaCalendarAlt } from 'react-icons/fa'
+import {
+	FaLocationArrow,
+	FaBriefcase,
+	FaCalendarAlt,
+	FaDollarSign,
+	FaUsers,
+} from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { useAppContext } from '../context/appContext'
 import Wrapper from '../assets/wrappers/Job'
@@ -14,6 +20,7 @@ const Job = ({
 	createdAt,
 	status,
 	date,
+	client,
 }) => {
 	const { setEditJob, deleteJob } = useAppContext()
 
@@ -23,15 +30,17 @@ const Job = ({
 	return (
 		<Wrapper>
 			<header>
-				<div className='main-icon'>{company.charAt(0)}</div>
+				<div className='main-icon'>{client.charAt(0)}</div>
 				<div className='info'>
+					<h4>{client}</h4>
 					<h5>{position}</h5>
 					<p>{company}</p>
 				</div>
 			</header>
 			<div className='content'>
 				<div className='content-center'>
-					<JobInfo icon={<FaLocationArrow />} text={jobLocation} />
+					<JobInfo icon={<FaUsers />} text={client} />
+					<JobInfo icon={<FaDollarSign />} text={jobLocation} />
 					<JobInfo icon={<FaCalendarAlt />} text={date_formatted} />
 					<JobInfo icon={<FaBriefcase />} text={jobType} />
 					<div className={`status ${status.replace(' ', '-')}`}>{status}</div>

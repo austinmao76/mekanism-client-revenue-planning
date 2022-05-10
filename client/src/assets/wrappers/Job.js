@@ -13,13 +13,16 @@ const Wrapper = styled.article`
 		display: grid;
 		grid-template-columns: auto 1fr;
 		align-items: center;
+		h4 {
+			letter-spacing: 0;
+		}
 		h5 {
 			letter-spacing: 0;
 		}
 	}
 	.main-icon {
-		width: 60px;
-		height: 60px;
+		width: 80px;
+		height: 80px;
 		display: grid;
 		place-items: center;
 		background: var(--primary-500);
@@ -31,6 +34,9 @@ const Wrapper = styled.article`
 		margin-right: 2rem;
 	}
 	.info {
+		h4 {
+			margin-bottom: 0.25rem;
+		}
 		h5 {
 			margin-bottom: 0.25rem;
 		}
@@ -39,6 +45,7 @@ const Wrapper = styled.article`
 			text-transform: capitalize;
 			color: var(--grey-400);
 			letter-spacing: var(--letterSpacing);
+			margin-bottom: 0.25rem;
 		}
 	}
 	.pending {
