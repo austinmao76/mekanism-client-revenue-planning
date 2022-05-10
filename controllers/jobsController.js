@@ -2,6 +2,7 @@ import Job from '../models/Job.js'
 import { StatusCodes } from 'http-status-codes'
 import { BadRequestError, NotFoundError } from '../errors/index.js'
 import mongoose from 'mongoose'
+import moment from 'moment'
 
 const createJob = async (req, res) => {
 	const { position, company } = req.body
@@ -77,7 +78,38 @@ const showStats = async (req, res) => {
 		awaitingSignature: stats['awaiting signature'] || 0,
 		approved: stats.approved || 0,
 	}
-	let monthlyApplications = []
+	let monthlyApplications = await Job.aggregate([
+		// { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+		{
+			$group: {
+				_id: {
+					year: {
+						$year: '$date',
+					},
+					month: {
+						$month: '$date',
+					},
+				},
+				count: { $sum: 1 },
+			},
+		},
+		{ $sort: { '_id.year': -1, '_id.month': -1 } },
+		{ $match: { '_id.year': new Date().getFullYear() } },
+	])
+	monthlyApplications = monthlyApplications
+		.map((item) => {
+			const {
+				_id: { year, month },
+				count,
+			} = item
+			// accepts 0-11
+			const date = moment()
+				.month(month - 1)
+				.year(year)
+				.format('MMM Y')
+			return { date, count }
+		})
+		.reverse()
 	res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
 }
 

@@ -11,6 +11,8 @@ import StatsContainer from './StatsContainer'
 import StatItem from './StatItem'
 import ChartsContainer from './ChartsContainer'
 import Loading from './Loading'
+import BarChartComponent from './BarChart'
+import AreaChartComponent from './AreaChart'
 
 export {
 	Logo,
@@ -26,4 +28,6 @@ export {
 	StatItem,
 	ChartsContainer,
 	Loading,
+	BarChartComponent,
+	AreaChartComponent,
 }
