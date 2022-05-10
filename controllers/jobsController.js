@@ -1,6 +1,7 @@
 import Job from '../models/Job.js'
 import { StatusCodes } from 'http-status-codes'
 import { BadRequestError, NotFoundError } from '../errors/index.js'
+import mongoose from 'mongoose'
 
 const createJob = async (req, res) => {
 	const { position, company } = req.body
@@ -60,9 +61,24 @@ const deleteJob = async (req, res) => {
 	await job.remove()
 	res.status(StatusCodes.OK).json({ msg: 'Success! Job removed' })
 }
-
 const showStats = async (req, res) => {
-	res.send('show stats')
+	let stats = await Job.aggregate([
+		// { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+		{ $group: { _id: '$status', count: { $sum: 1 } } },
+	])
+	stats = stats.reduce((acc, curr) => {
+		const { _id: title, count } = curr
+		acc[title] = count
+		return acc
+	}, {})
+
+	const defaultStats = {
+		pending: stats.pending || 0,
+		awaitingSignature: stats['awaiting signature'] || 0,
+		approved: stats.approved || 0,
+	}
+	let monthlyApplications = []
+	res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
 }
 
 export { createJob, getAllJobs, updateJob, deleteJob, showStats }
