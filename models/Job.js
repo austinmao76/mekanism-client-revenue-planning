@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import { format, endOfDay } from 'date-fns'
 import moment from 'moment'
 
 const JobSchema = new mongoose.Schema(
