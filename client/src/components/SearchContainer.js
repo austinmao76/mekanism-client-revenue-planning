@@ -15,7 +15,7 @@ const SearchContainer = () => {
 		sort,
 		sortOptions,
 		client,
-		company,
+		jobNumber,
 		endDate,
 		startDate,
 	} = useAppContext()
@@ -47,9 +47,9 @@ const SearchContainer = () => {
 						handleChange={handleSearch}></FormRow>
 					<FormRow
 						type='text'
-						name='company'
+						name='jobNumber'
 						labelText={'Job Number'}
-						value={company}
+						value={jobNumber}
 						handleChange={handleSearch}></FormRow>
 					{/* search by status */}
 					<FormRowSelect

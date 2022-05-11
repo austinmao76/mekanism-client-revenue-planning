@@ -34,8 +34,6 @@ import {
 const token = localStorage.getItem('token')
 const user = localStorage.getItem('user')
 
-// const userLocation = localStorage.getItem('location')
-
 const initialState = {
 	isLoading: false,
 	showAlert: false,
@@ -43,15 +41,13 @@ const initialState = {
 	alertType: '',
 	user: user ? JSON.parse(user) : null,
 	token: token,
-	userLocation: '0' || '',
-	jobLocation: '0' || '',
+	amount: '0',
 	showSidebar: false,
 	isEditing: false,
 	editJobId: '',
-	position: '',
-	company: '',
+	jobName: '',
+	jobNumber: '',
 	client: '',
-	// jobLocation
 	jobTypeOptions: [
 		'Social Media Comms',
 		'Experiential',
@@ -61,7 +57,15 @@ const initialState = {
 		'PM Pediatrics',
 	],
 	jobType: 'Social Media Comms',
-	statusOptions: ['pending', 'awaiting signature', 'approved'],
+	statusOptions: [
+		'pending',
+		'awaiting signature',
+		'approved',
+		'budget',
+		'RFQ1',
+		'RFQ2',
+		'RFQ3',
+	],
 	status: 'pending',
 	date: moment().format('YYYY-MM-DD'),
 	jobs: [],
@@ -73,8 +77,8 @@ const initialState = {
 	search: '',
 	searchStatus: 'all',
 	searchType: 'all',
-	Company: '',
-	Client: '',
+	jobNumber: '',
+	client: '',
 	sort: 'latest',
 	sortOptions: ['latest', 'oldest', 'a-z', 'z-a'],
 	startDate: moment().startOf('year').format('yyyy-MM-DD'),
@@ -203,14 +207,14 @@ const AppProvider = ({ children }) => {
 	const createJob = async () => {
 		dispatch({ type: CREATE_JOB_BEGIN })
 		try {
-			const { position, company, client, jobLocation, jobType, status, date } =
+			const { jobName, jobNumber, client, amount, jobType, status, date } =
 				state
 
 			await authFetch.post('/jobs', {
-				company,
-				position,
+				jobNumber,
+				jobName,
 				client,
-				jobLocation,
+				amount,
 				jobType,
 				status,
 				date,
@@ -236,7 +240,7 @@ const AppProvider = ({ children }) => {
 			page,
 			search,
 			client,
-			company,
+			jobNumber,
 			searchStatus,
 			searchType,
 			sort,
@@ -250,8 +254,8 @@ const AppProvider = ({ children }) => {
 		if (client) {
 			url = url + `&client=${client}`
 		}
-		if (company) {
-			url = url + `&company=${company}`
+		if (jobNumber) {
+			url = url + `&jobNumber=${jobNumber}`
 		}
 		dispatch({ type: GET_JOBS_BEGIN })
 		try {
@@ -277,13 +281,13 @@ const AppProvider = ({ children }) => {
 	const editJob = async () => {
 		dispatch({ type: EDIT_JOB_BEGIN })
 		try {
-			const { position, company, jobLocation, jobType, status, date, client } =
+			const { jobName, jobNumber, amount, jobType, status, date, client } =
 				state
 
 			await authFetch.patch(`/jobs/${state.editJobId}`, {
-				company,
-				position,
-				jobLocation,
+				jobNumber,
+				jobName,
+				amount,
 				jobType,
 				status,
 				date,

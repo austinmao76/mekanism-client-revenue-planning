@@ -4,12 +4,12 @@ import moment from 'moment'
 const JobSchema = new mongoose.Schema(
 	{
 		// job number
-		company: {
+		jobNumber: {
 			type: String,
 			maxlength: 50,
 		},
 		// job name
-		position: {
+		jobName: {
 			type: String,
 			required: [true, 'Please provide job name'],
 			maxlength: 100,
@@ -47,8 +47,8 @@ const JobSchema = new mongoose.Schema(
 		},
 
 		//amount
-		jobLocation: {
-			type: String,
+		amount: {
+			type: Number,
 			default: '1000',
 			required: true,
 		},

@@ -13,9 +13,9 @@ import moment from 'moment'
 
 const Job = ({
 	_id,
-	position,
-	company,
-	jobLocation,
+	jobName,
+	jobNumber,
+	amount,
 	jobType,
 	createdAt,
 	status,
@@ -33,14 +33,14 @@ const Job = ({
 				<div className='main-icon'>{client.charAt(0)}</div>
 				<div className='info'>
 					<h4>{client}</h4>
-					<h5>{position}</h5>
-					<p>{company}</p>
+					<h5>{jobName}</h5>
+					<p>{jobNumber}</p>
 				</div>
 			</header>
 			<div className='content'>
 				<div className='content-center'>
 					<JobInfo icon={<FaUsers />} text={client} />
-					<JobInfo icon={<FaDollarSign />} text={jobLocation} />
+					<JobInfo icon={<FaDollarSign />} text={amount} />
 					<JobInfo icon={<FaCalendarAlt />} text={date_formatted} />
 					<JobInfo icon={<FaBriefcase />} text={jobType} />
 					<div className={`status ${status.replace(' ', '-')}`}>{status}</div>

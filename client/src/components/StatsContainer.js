@@ -7,22 +7,22 @@ const StatsContainer = () => {
 	const { stats } = useAppContext()
 	const defaultStats = [
 		{
-			title: 'pending',
-			count: stats.pending || 0,
+			title: "McDonald's",
+			count: stats['mcdonalds'] || 0,
 			icon: <FaSpinner />,
 			color: '#e9b949',
 			bcg: '#fcefc7',
 		},
 		{
-			title: 'awaiting signature',
-			count: stats['awaitingSignature'] || 0,
+			title: 'PM Pediatrics',
+			count: stats['pmpediatrics'] || 0,
 			icon: <FaFileSignature />,
 			color: '#1d3557',
 			bcg: '#caf0f8',
 		},
 		{
-			title: 'approved',
-			count: stats.approved || 0,
+			title: 'Social Media Comms',
+			count: stats['socialMediaComms'] || 0,
 			icon: <FaCheck />,
 			color: '#04e762',
 			bcg: '#066839',

@@ -17,7 +17,7 @@ const links = [
 	},
 	{
 		id: 3,
-		text: 'add/edit revenue',
+		text: 'add revenue',
 		path: 'add-job',
 		icon: <RiExchangeDollarLine />,
 	},

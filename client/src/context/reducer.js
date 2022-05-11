@@ -58,7 +58,7 @@ const reducer = (state, action) => {
 			token: action.payload.token,
 			user: action.payload.user,
 			userLocation: action.payload.location,
-			jobLocation: action.payload.location,
+			amount: action.payload.location,
 			showAlert: true,
 			alertType: 'success',
 			alertText: action.payload.alertText,
@@ -84,7 +84,7 @@ const reducer = (state, action) => {
 			user: null,
 			token: null,
 			userLocation: '',
-			jobLocation: '',
+			amount: '',
 		}
 	}
 
@@ -99,7 +99,7 @@ const reducer = (state, action) => {
 			token: action.payload.token,
 			user: action.payload.user,
 			userLocation: action.payload.location,
-			jobLocation: action.payload.location,
+			amount: action.payload.location,
 			showAlert: true,
 			alertType: 'success',
 			alertText: 'User Profile Updated!',
@@ -121,10 +121,10 @@ const reducer = (state, action) => {
 		const initialState = {
 			isEditing: false,
 			editJobId: '',
-			position: '',
-			company: '',
+			jobName: '',
+			jobNumber: '',
 			client: '',
-			jobLocation: '0',
+			amount: '0',
 			jobType: 'Social Media Comms',
 			status: 'pending',
 			date: moment().format('YYYY-MM-DD'),
@@ -167,24 +167,16 @@ const reducer = (state, action) => {
 	}
 	if (action.type === SET_EDIT_JOB) {
 		const job = state.jobs.find((job) => job._id === action.payload.id)
-		const {
-			_id,
-			position,
-			company,
-			jobLocation,
-			jobType,
-			status,
-			client,
-			date,
-		} = job
+		const { _id, jobName, jobNumber, amount, jobType, status, client, date } =
+			job
 		return {
 			...state,
 			isEditing: true,
 			editJobId: _id,
-			position,
-			company,
+			jobName,
+			jobNumber,
 			client,
-			jobLocation,
+			amount,
 			jobType,
 			status,
 			date,
@@ -231,7 +223,7 @@ const reducer = (state, action) => {
 		return {
 			...state,
 			search: '',
-			company: '',
+			jobNumber: '',
 			client: '',
 			searchStatus: 'all',
 			searchType: 'all',

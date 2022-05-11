@@ -6,10 +6,10 @@ const AddJob = () => {
 		isEditing,
 		showAlert,
 		displayAlert,
-		position,
-		company,
+		jobName,
+		jobNumber,
 		client,
-		jobLocation,
+		amount,
 		jobType,
 		jobTypeOptions,
 		status,
@@ -25,7 +25,7 @@ const AddJob = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault()
 
-		if (!position || !company || !jobLocation) {
+		if (!jobName || !jobNumber || !amount) {
 			displayAlert()
 			return
 		}
@@ -46,21 +46,21 @@ const AddJob = () => {
 				<h3>{isEditing ? 'edit job' : 'add job'} </h3>
 				{showAlert && <Alert />}
 
-				{/* position */}
+				{/* jobName */}
 				<div className='form-center'>
 					<FormRow
 						type='text'
 						labelText='Job Name'
-						name='position'
-						value={position}
+						name='jobName'
+						value={jobName}
 						handleChange={handleJobInput}
 					/>
-					{/* company */}
+					{/* jobNumber */}
 					<FormRow
 						type='text'
 						labelText='Job Number'
-						name='company'
-						value={company}
+						name='jobNumber'
+						value={jobNumber}
 						handleChange={handleJobInput}
 					/>
 					{/* client */}
@@ -73,10 +73,10 @@ const AddJob = () => {
 					/>
 					{/* location */}
 					<FormRow
-						type='text'
+						type='number'
 						labelText='Amount'
-						name='jobLocation'
-						value={jobLocation}
+						name='amount'
+						value={amount}
 						handleChange={handleJobInput}
 					/>
 					{/* job status */}

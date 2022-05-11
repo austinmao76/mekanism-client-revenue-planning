@@ -11,7 +11,7 @@ function ChartsContainer() {
 
 	return (
 		<Wrapper>
-			<h4>Monthly Applications</h4>
+			<h4>Monthly Revenue</h4>
 
 			<button type='button' onClick={() => setBarChart(!barChart)}>
 				{barChart ? 'AreaChart' : 'BarChart'}
