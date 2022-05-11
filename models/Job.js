@@ -3,14 +3,15 @@ import moment from 'moment'
 
 const JobSchema = new mongoose.Schema(
 	{
+		// job number
 		company: {
 			type: String,
-			required: [true, 'Please provide company name'],
 			maxlength: 50,
 		},
+		// job name
 		position: {
 			type: String,
-			required: [true, 'Please provide position'],
+			required: [true, 'Please provide job name'],
 			maxlength: 100,
 		},
 		client: {
@@ -20,7 +21,15 @@ const JobSchema = new mongoose.Schema(
 		},
 		status: {
 			type: String,
-			enum: ['pending', 'awaiting signature', 'approved'],
+			enum: [
+				'pending',
+				'awaiting signature',
+				'approved',
+				'budget',
+				'RFQ1',
+				'RFQ2',
+				'RFQ3',
+			],
 			default: 'pending',
 		},
 
@@ -36,6 +45,8 @@ const JobSchema = new mongoose.Schema(
 			],
 			default: 'Social Media Comms',
 		},
+
+		//amount
 		jobLocation: {
 			type: String,
 			default: '1000',

@@ -12,9 +12,9 @@ const Landing = () => {
 			<div className='container page'>
 				<div className='info'>
 					<h1>
-						Narrative <span>Finance</span> Management
+						Financial <span>Reporting</span>
 					</h1>
-					<p>client revenue and financial reporting</p>
+					<p>login or register to continue</p>
 					<Link to='/register' className='btn btn-hero'>
 						Login/Register
 					</Link>
