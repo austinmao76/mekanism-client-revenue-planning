@@ -148,7 +148,10 @@ const showStats = async (req, res) => {
 	])
 	stats = stats.reduce((acc, curr) => {
 		const { _id: title, count } = curr
-		acc[title] = count
+		acc[title] = new Intl.NumberFormat('en-US', {
+			style: 'currency',
+			currency: 'USD',
+		}).format(count)
 		return acc
 	}, {})
 
@@ -159,7 +162,6 @@ const showStats = async (req, res) => {
 	}
 
 	let monthlyApplications = await Job.aggregate([
-		{ $match: { status: 'approved' } },
 		{ $match: { date: { $gte: yearStart } } },
 		{
 			$group: {
@@ -170,28 +172,54 @@ const showStats = async (req, res) => {
 					month: {
 						$month: '$date',
 					},
+					status: '$status',
 				},
+
 				revenue: { $sum: '$amount' },
 			},
 		},
-		{ $sort: { '_id.year': -1, '_id.month': -1 } },
+		{
+			$group: {
+				_id: {
+					year: '$_id.year',
+					month: '$_id.month',
+				},
+				items: { $addToSet: { name: '$_id.status', value: '$revenue' } },
+			},
+		},
+
+		{
+			$project: {
+				tmp: {
+					$arrayToObject: { $zip: { inputs: ['$items.name', '$items.value'] } },
+				},
+			},
+		},
+		{ $addFields: { 'tmp.year': '$_id.year', 'tmp.month': '$_id.month' } },
+		{ $replaceRoot: { newRoot: '$tmp' } },
+		{ $sort: { year: 1, month: 1 } },
 	])
+	console.log(monthlyApplications)
 
-	monthlyApplications = monthlyApplications
-		.map((item) => {
-			const {
-				_id: { year, month },
-				revenue,
-			} = item
-			// accepts 0-11
-			const date = moment()
-				.month(month - 1)
-				.year(year)
-				.format('MMM Y')
-			return { date, revenue }
-		})
-		.reverse()
+	monthlyApplications = monthlyApplications.map((item) => {
+		const {
+			year,
+			month,
+			RFQ1,
+			approved,
+			'awaiting signature': awaitingSignature,
+			pending,
+		} = item
+		// accepts 0-11
 
+		const date = moment()
+			.month(month - 1)
+			.year(year)
+			.format('MMM Y')
+
+		return { date, RFQ1, approved, awaitingSignature, pending }
+	})
+	console.log(monthlyApplications)
 	res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
 }
 export { createJob, getAllJobs, updateJob, deleteJob, showStats }

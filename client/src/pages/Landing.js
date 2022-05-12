@@ -10,6 +10,7 @@ const Landing = () => {
 				<Logo />
 			</nav>
 			<div className='container page'>
+				<img src={main} alt='narrative' className='img main-img' />
 				<div className='info'>
 					<h1>
 						Financial <span>Reporting</span>
@@ -19,7 +20,6 @@ const Landing = () => {
 						Login/Register
 					</Link>
 				</div>
-				<img src={main} alt='narrative' className='img main-img' />
 			</div>
 		</Wrapper>
 	)

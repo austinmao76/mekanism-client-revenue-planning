@@ -6,6 +6,7 @@ import {
 	CartesianGrid,
 	Tooltip,
 	ResponsiveContainer,
+	Legend,
 } from 'recharts'
 
 const BarChartComponent = ({ data }) => {
@@ -33,7 +34,29 @@ const BarChartComponent = ({ data }) => {
 					}
 				/>
 				<Tooltip />
-				<Bar dataKey='revenue' fill='#2cb1bc' barSize={75} />
+				<Legend verticalAlign='top' height={36} />
+				<Bar
+					dataKey='approved'
+					name='Approved'
+					stackId='a'
+					fill='#3d5a80'
+					barSize={75}
+				/>
+				<Bar
+					dataKey='awaitingSignature'
+					name='Awaiting Signature'
+					stackId='a'
+					fill='#98c1d9'
+					barSize={75}
+				/>
+				<Bar
+					dataKey='pending'
+					name='Pending'
+					fill='#e56b6f'
+					stackId='a'
+					barSize={75}
+				/>
+				<Bar dataKey='RFQ1' stackId='b' fill='#ee6c4d' barSize={75} />
 			</BarChart>
 		</ResponsiveContainer>
 	)
