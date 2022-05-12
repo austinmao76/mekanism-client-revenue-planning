@@ -199,7 +199,6 @@ const showStats = async (req, res) => {
 		{ $replaceRoot: { newRoot: '$tmp' } },
 		{ $sort: { year: 1, month: 1 } },
 	])
-	console.log(monthlyApplications)
 
 	monthlyApplications = monthlyApplications.map((item) => {
 		const {
@@ -219,7 +218,57 @@ const showStats = async (req, res) => {
 
 		return { date, RFQ1, approved, awaitingSignature, pending }
 	})
-	console.log(monthlyApplications)
-	res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
+	let clientRev = await Job.aggregate([
+		{ $match: { date: { $gte: yearStart } } },
+		{
+			$group: {
+				_id: {
+					date: { $dateToString: { format: '%Y-%m-%d', date: '$date' } },
+					client: '$client',
+					jobNumber: '$jobNumber',
+					jobName: '$jobName',
+					jobType: '$jobType',
+					status: '$status',
+					revenue: '$amount',
+				},
+			},
+		},
+		{
+			$group: {
+				_id: {
+					client: '$_id.client',
+					jobNumber: '$_id.jobNumber',
+					jobName: '$_id.jobName',
+					jobType: '$_id.jobType',
+					status: '$_id.status',
+				},
+				items: { $addToSet: { name: '$_id.date', value: '$_id.revenue' } },
+			},
+		},
+
+		{
+			$project: {
+				tmp: {
+					$arrayToObject: { $zip: { inputs: ['$items.name', '$items.value'] } },
+				},
+			},
+		},
+		{
+			$addFields: {
+				'tmp.client': '$_id.client',
+				'tmp.jobNumber': '$_id.jobNumber',
+				'tmp.jobName': '$_id.jobName',
+				'tmp.jobType': '$_id.jobType',
+				'tmp.status': '$_id.status',
+			},
+		},
+		{ $replaceRoot: { newRoot: '$tmp' } },
+		{ $sort: { date: -1 } },
+	])
+
+	console.log(clientRev)
+	res
+		.status(StatusCodes.OK)
+		.json({ defaultStats, monthlyApplications, clientRev })
 }
 export { createJob, getAllJobs, updateJob, deleteJob, showStats }

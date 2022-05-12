@@ -13,6 +13,8 @@ import ChartsContainer from './ChartsContainer'
 import Loading from './Loading'
 import BarChartComponent from './BarChart'
 import AreaChartComponent from './AreaChart'
+import PivotTableContainer from './PivotTableContainer'
+import { COLUMNS } from './Columns'
 
 export {
 	Logo,
@@ -30,4 +32,6 @@ export {
 	Loading,
 	BarChartComponent,
 	AreaChartComponent,
+	PivotTableContainer,
+	COLUMNS,
 }

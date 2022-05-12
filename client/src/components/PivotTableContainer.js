@@ -1,0 +1,62 @@
+import React, { useMemo, useEffect } from 'react'
+import { useTable } from 'react-table'
+import { useAppContext } from '../context/appContext'
+import { COLUMNS } from './Columns'
+import moment from 'moment'
+import '../assets/wrappers/table.css'
+
+const PivotTableContainer = () => {
+	const cols = useMemo(() => COLUMNS, [])
+	const { clientRev: data } = useAppContext()
+	console.log(data)
+	const {
+		getTableProps,
+		getTableBodyProps,
+		headerGroups,
+		footerGroups,
+		rows,
+		prepareRow,
+	} = useTable({
+		columns: cols,
+		data,
+	})
+
+	return (
+		<>
+			<table {...getTableProps()}>
+				<thead>
+					{headerGroups.map((headerGroup) => (
+						<tr {...headerGroup.getHeaderGroupProps()}>
+							{headerGroup.headers?.map((column) => (
+								<th {...column.getHeaderProps()}>{column.render('Header')}</th>
+							))}
+						</tr>
+					))}
+				</thead>
+				<tbody {...getTableBodyProps()}>
+					{rows?.map((row) => {
+						prepareRow(row)
+						return (
+							<tr {...row.getRowProps()}>
+								{row.cells.map((cell) => {
+									return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+								})}
+							</tr>
+						)
+					})}
+				</tbody>
+				<tfoot>
+					{footerGroups.map((footerGroup) => (
+						<tr {...footerGroup.getFooterGroupProps()}>
+							{footerGroup.headers.map((column) => (
+								<td {...column.getFooterProps()}>{column.render('Footer')}</td>
+							))}
+						</tr>
+					))}
+				</tfoot>
+			</table>
+		</>
+	)
+}
+
+export default PivotTableContainer

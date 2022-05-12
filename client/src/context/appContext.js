@@ -324,6 +324,7 @@ const AppProvider = ({ children }) => {
 				payload: {
 					stats: data.defaultStats,
 					monthlyApplications: data.monthlyApplications,
+					clientRev: data.clientRev,
 				},
 			})
 		} catch (error) {
