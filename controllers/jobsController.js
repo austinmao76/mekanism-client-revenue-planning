@@ -266,7 +266,6 @@ const showStats = async (req, res) => {
 		{ $sort: { date: -1 } },
 	])
 
-	console.log(clientRev)
 	res
 		.status(StatusCodes.OK)
 		.json({ defaultStats, monthlyApplications, clientRev })
