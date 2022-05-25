@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import { BadRequestError, NotFoundError } from '../errors/index.js'
 import mongoose from 'mongoose'
 import moment from 'moment'
-
+import _ from 'lodash'
 const createJob = async (req, res) => {
 	const { jobName, jobNumber } = req.body
 
@@ -219,7 +219,16 @@ const showStats = async (req, res) => {
 		return { date, RFQ1, approved, awaitingSignature, pending }
 	})
 	let clientRev = await Job.aggregate([
-		{ $match: { date: { $gte: yearStart } } },
+		{
+			$match: {
+				date: { $gte: yearStart },
+				status: {
+					$in: ['approved', 'awaiting signature', 'pending'],
+				},
+				amount: { $exists: true },
+				amount: { $ne: 0 },
+			},
+		},
 		{
 			$group: {
 				_id: {
@@ -265,9 +274,132 @@ const showStats = async (req, res) => {
 		{ $replaceRoot: { newRoot: '$tmp' } },
 		{ $sort: { date: -1 } },
 	])
+	clientRev = clientRev.map((cols) => {
+		const year = moment().format('YYYY')
+		const {
+			client,
+			jobNumber,
+			jobName,
+			jobType,
+			status,
+			[`${year}-01-01`]: january,
+			[`${year}-02-01`]: february,
+			[`${year}-03-01`]: march,
+			[`${year}-04-01`]: april,
+			[`${year}-05-01`]: may,
+			[`${year}-06-01`]: june,
+			[`${year}-07-01`]: july,
+			[`${year}-08-01`]: august,
+			[`${year}-09-01`]: september,
+			[`${year}-10-01`]: october,
+			[`${year}-11-01`]: november,
+			[`${year}-12-01`]: december,
+		} = cols
+
+		return {
+			client,
+			jobNumber,
+			jobName,
+			jobType,
+			status,
+			[`${year}-01-01`]: january || 0,
+			[`${year}-02-01`]: february || 0,
+			[`${year}-03-01`]: march || 0,
+			[`${year}-04-01`]: april || 0,
+			[`${year}-05-01`]: may || 0,
+			[`${year}-06-01`]: june || 0,
+			[`${year}-07-01`]: july || 0,
+			[`${year}-08-01`]: august || 0,
+			[`${year}-09-01`]: september || 0,
+			[`${year}-10-01`]: october || 0,
+			[`${year}-11-01`]: november || 0,
+			[`${year}-12-01`]: december || 0,
+		}
+	})
+	let clientRevTotal = await Job.aggregate([
+		{
+			$match: {
+				date: { $gte: yearStart },
+				status: {
+					$in: ['approved', 'awaiting signature', 'pending'],
+				},
+				amount: { $exists: true },
+				amount: { $ne: 0 },
+			},
+		},
+		{
+			$group: {
+				_id: {
+					date: { $dateToString: { format: '%Y-%m-%d', date: '$date' } },
+					client: '$client',
+
+					revenue: '$amount',
+				},
+			},
+		},
+		{
+			$group: {
+				_id: {
+					client: '$_id.client',
+				},
+				items: { $addToSet: { name: '$_id.date', value: '$_id.revenue' } },
+			},
+		},
+
+		{
+			$project: {
+				tmp: {
+					$arrayToObject: { $zip: { inputs: ['$items.name', '$items.value'] } },
+				},
+			},
+		},
+		{
+			$addFields: {
+				'tmp.client': '$_id.client',
+			},
+		},
+		{ $replaceRoot: { newRoot: '$tmp' } },
+		{ $sort: { date: -1 } },
+	])
+	clientRevTotal = clientRevTotal.map((cols) => {
+		const year = moment().format('YYYY')
+		const {
+			client,
+
+			[`${year}-01-01`]: january,
+			[`${year}-02-01`]: february,
+			[`${year}-03-01`]: march,
+			[`${year}-04-01`]: april,
+			[`${year}-05-01`]: may,
+			[`${year}-06-01`]: june,
+			[`${year}-07-01`]: july,
+			[`${year}-08-01`]: august,
+			[`${year}-09-01`]: september,
+			[`${year}-10-01`]: october,
+			[`${year}-11-01`]: november,
+			[`${year}-12-01`]: december,
+		} = cols
+
+		return {
+			client,
+
+			[`${year}-01-01`]: january || 0,
+			[`${year}-02-01`]: february || 0,
+			[`${year}-03-01`]: march || 0,
+			[`${year}-04-01`]: april || 0,
+			[`${year}-05-01`]: may || 0,
+			[`${year}-06-01`]: june || 0,
+			[`${year}-07-01`]: july || 0,
+			[`${year}-08-01`]: august || 0,
+			[`${year}-09-01`]: september || 0,
+			[`${year}-10-01`]: october || 0,
+			[`${year}-11-01`]: november || 0,
+			[`${year}-12-01`]: december || 0,
+		}
+	})
 
 	res
 		.status(StatusCodes.OK)
-		.json({ defaultStats, monthlyApplications, clientRev })
+		.json({ defaultStats, monthlyApplications, clientRev, clientRevTotal })
 }
 export { createJob, getAllJobs, updateJob, deleteJob, showStats }

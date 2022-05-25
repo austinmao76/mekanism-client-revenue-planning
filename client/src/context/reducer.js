@@ -217,6 +217,8 @@ const reducer = (state, action) => {
 			isLoading: false,
 			stats: action.payload.stats,
 			monthlyApplications: action.payload.monthlyApplications,
+			clientRev: action.payload.clientRev,
+			clientRevTotal: action.payload.clientRevTotal,
 		}
 	}
 	if (action.type === CLEAR_FILTERS) {

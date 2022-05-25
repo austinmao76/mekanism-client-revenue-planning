@@ -8,7 +8,7 @@ import Wrapper from '../assets/wrappers/ChartsContainer'
 function ChartsContainer() {
 	const [barChart, setBarChart] = useState(true)
 	const { monthlyApplications: data } = useAppContext()
-
+	console.log(data)
 	return (
 		<Wrapper>
 			<h4>Monthly Revenue</h4>

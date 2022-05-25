@@ -83,6 +83,8 @@ const initialState = {
 	sortOptions: ['latest', 'oldest', 'a-z', 'z-a'],
 	startDate: moment().startOf('year').format('yyyy-MM-DD'),
 	endDate: moment().format('yyyy-MM-DD'),
+	clientRev: [],
+	clientRevTotal: [],
 }
 
 const AppContext = React.createContext()
@@ -325,6 +327,7 @@ const AppProvider = ({ children }) => {
 					stats: data.defaultStats,
 					monthlyApplications: data.monthlyApplications,
 					clientRev: data.clientRev,
+					clientRevTotal: data.clientRevTotal,
 				},
 			})
 		} catch (error) {
