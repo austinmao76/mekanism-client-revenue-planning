@@ -314,7 +314,7 @@ const PivotTableContainer = () => {
 			},
 			{
 				Header: `${year}-11-01`,
-				FFooter: (info) => {
+				Footer: (info) => {
 					// Only calculate total visits if rows change
 					let total = React.useMemo(
 						() =>
