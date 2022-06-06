@@ -21,7 +21,7 @@ const PivotTableContainer = () => {
 			{
 				Header: 'Job Number',
 				Footer: 'Job Number',
-				accessor: 'd =>jobNumber',
+				accessor: 'jobNumber',
 				sticky: 'left',
 			},
 			{
