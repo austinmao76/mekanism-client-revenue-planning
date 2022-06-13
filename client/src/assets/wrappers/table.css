@@ -11,7 +11,7 @@ table th {
 }
 
 table tr:nth-child(even) {
-	background-color: #f2f2f2;
+	background-color: #5d5d5d3b;
 }
 
 table tr:hover {
@@ -23,6 +23,6 @@ tfoot td {
 	padding-top: 12px;
 	padding-bottom: 12px;
 	text-align: center;
-	background-color: #4caf50;
+	background-color: #4c65af;
 	color: white;
 }

@@ -360,7 +360,7 @@ const showStats = async (req, res) => {
 		},
 		{ $replaceRoot: { newRoot: '$tmp' } },
 		{ $sort: { date: -1 } },
-		{ $sort: { client: 1 } },
+		{ $sort: { jobType: 1 } },
 		{ $sort: { revenue: -1 } },
 	])
 	clientRevTotal = clientRevTotal.map((cols) => {

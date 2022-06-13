@@ -369,7 +369,24 @@ const PivotTableContainer = () => {
 		],
 		[]
 	)
-
+	const sortState = useMemo(() => [
+		{
+			sortBy: [
+				{
+					id: 'jobType',
+					desc: true,
+				},
+				{
+					id: 'status',
+					desc: false,
+				},
+				{
+					id: 'client',
+					desc: false,
+				},
+			],
+		},
+	])
 	const defaultColumn = React.useMemo(
 		() => ({
 			Filter: ColumnFilter,
@@ -388,6 +405,22 @@ const PivotTableContainer = () => {
 		{
 			columns: cols,
 			data: items,
+			initialState: {
+				sortBy: [
+					{
+						id: 'jobType',
+						desc: true,
+					},
+					{
+						id: 'status',
+						desc: false,
+					},
+					{
+						id: 'client',
+						desc: false,
+					},
+				],
+			},
 		},
 		useFilters,
 		useSortBy
